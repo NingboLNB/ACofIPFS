@@ -1,0 +1,45 @@
+test:
+    name: basic-contract-benchmark
+    description: test benchmark
+    workers:
+      type: local
+      number: 3
+    rounds:
+      - label: Warm-up ACMC
+        description: Read asset benchmark
+        #txDuration: 30
+        txNumber: 200
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 10 
+        workload:
+          module: workload/queryObject.js
+          arguments:
+            contractId: ACMC
+      - label: Warm-up ALMC
+        description: Read asset benchmark
+        #txDuration: 30
+        txNumber: 200
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 10
+        workload:
+          module: workload/queryGrantLog.js
+          arguments:
+            contractId: ALMC
+      
+      - label: getToken
+        description: Read asset benchmark
+        txDuration: 90
+        #txNumber: 5500
+        rateControl: 
+          type: fixed-load
+          opts:
+            transactionLoad: 550
+            #startingTps: 50 
+        workload:
+          module: workload/getToken.js
+          arguments:
+            contractId: ACMC

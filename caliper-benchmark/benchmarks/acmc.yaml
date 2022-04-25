@@ -1,0 +1,74 @@
+test:
+    name: basic-contract-benchmark
+    description: test benchmark
+    workers:
+      type: local
+      number: 3
+    rounds:
+      - label: queryObject
+        description: Read asset benchmark
+        txDuration: 60
+        #txNumber: 4000
+        rateControl: 
+          type: linear-rate
+          opts:
+              startingTps: 50
+              finishingTps: 300
+        workload:
+          module: workload/queryObject.js
+          arguments:
+            contractId: ACMC
+
+      - label: queryPolicy
+        description: Read asset benchmark
+        txDuration: 60
+        #txNumber: 4000
+        rateControl: 
+          type: linear-rate
+          opts:
+              startingTps: 50
+              finishingTps: 300
+        workload:
+          module: workload/queryPolicy.js
+          arguments:
+            contractId: ACMC
+
+      - label: getToken
+        description: Read asset benchmark
+        txDuration: 60
+        #txNumber: 4000
+        rateControl: 
+          type: linear-rate
+          opts:
+              startingTps: 50
+              finishingTps: 300
+        workload:
+          module: workload/getToken.js
+          arguments:
+            contractId: ACMC
+      - label: AddPolicy
+        description: Read asset benchmark
+        txDuration: 60
+        #txNumber: 4000
+        rateControl: 
+          type: linear-rate
+          opts:
+              startingTps: 50
+              finishingTps: 300
+        workload:
+          module: workload/addPolicy.js
+          arguments:
+            contractId: ACMC
+      - label: AddResource
+        description: Read asset benchmark
+        txDuration: 60
+        #txNumber: 4000
+        rateControl: 
+          type: linear-rate
+          opts:
+              startingTps: 50
+              finishingTps: 300
+        workload:
+          module: workload/addResource.js
+          arguments:
+            contractId: ACMC

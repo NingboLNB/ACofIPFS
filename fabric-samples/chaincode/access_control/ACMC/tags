@@ -1,0 +1,31 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ANDfunction	./main.go	/^func ANDfunction(val1 bool,val2 bool) bool{$/;"	f
+Init	./main.go	/^func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {$/;"	f
+Invoke	./main.go	/^func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {$/;"	f
+ORfunction	./main.go	/^func ORfunction(val1 bool,val2 bool) bool{$/;"	f
+SimpleChaincode	./main.go	/^type SimpleChaincode struct {$/;"	t
+addPolicy	./main.go	/^func (t *SimpleChaincode) addPolicy(stub shim.ChaincodeStubInterface,args []string) pb.Response{$/;"	f
+addResource	./main.go	/^func (t *SimpleChaincode) addResource(stub shim.ChaincodeStubInterface,args []string) pb.Response{$/;"	f
+denyOverrides	./main.go	/^func denyOverrides(rule1 string ,rule2 string ,rule3 string) string{$/;"	f
+getDecision	./main.go	/^func  getDecision(stub shim.ChaincodeStubInterface,args []string) string{$/;"	f
+getEnvirment	./main.go	/^func  getEnvirment(stub shim.ChaincodeStubInterface) string{$/;"	f
+getObject	./main.go	/^func  getObject(stub shim.ChaincodeStubInterface, args []string) (map[string]string,int) {$/;"	f
+getPolicy	./main.go	/^func  getPolicy(stub shim.ChaincodeStubInterface,args []string) (map[string]map[string]map[string]string,int){$/;"	f
+getSubject	./main.go	/^func  getSubject(stub shim.ChaincodeStubInterface) (map[string]string,int){$/;"	f
+getToken	./main.go	/^func (t *SimpleChaincode) getToken(stub shim.ChaincodeStubInterface,args []string) pb.Response{$/;"	f
+isManager	./main.go	/^func isManager(role string) bool{$/;"	f
+isMeetedTarget	./main.go	/^func isMeetedTarget() bool{$/;"	f
+isOwner	./main.go	/^func isOwner(user string,owner string) bool{$/;"	f
+isSameDepartment	./main.go	/^func isSameDepartment(sa_map map[string]string,oa_map map[string]string) bool{$/;"	f
+main	./main.go	/^func main() {$/;"	f
+main	./main.go	/^package main$/;"	p
+more_than	./main.go	/^func more_than(subject_level string, level int) bool {$/;"	f
+permitOverrides	./main.go	/^func permitOverrides(rule1 string ,rule2 string ,rule3 string) string{$/;"	f
+queryObject	./main.go	/^func (t *SimpleChaincode) queryObject(stub shim.ChaincodeStubInterface, args []string) pb.Response {$/;"	f
+queryPolicy	./main.go	/^func (t *SimpleChaincode) queryPolicy(stub shim.ChaincodeStubInterface,args []string) pb.Response{$/;"	f
+string_equal	./main.go	/^func string_equal(str1 string,str2 string) bool{$/;"	f

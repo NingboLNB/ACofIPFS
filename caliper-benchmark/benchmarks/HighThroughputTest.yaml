@@ -1,0 +1,168 @@
+test:
+    name: basic-contract-benchmark
+    description: test benchmark
+    workers:
+      type: local
+      number: 4
+    rounds:
+      - label: Warm-up
+        description: Read asset benchmark
+        txDuration: 30
+        #txNumber: 4000
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 200 
+        workload:
+          module: workload/Read.js
+          arguments:
+            contractId: ACMC
+
+      - label: Read
+        description: Read asset benchmark
+        txDuration: 30
+        #txNumber: 2000
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 200 
+        workload:
+          module: workload/Read.js
+          arguments:
+            contractId: ACMC
+      - label: HighThroughputRead
+        description: Read asset benchmark
+        txDuration: 30
+        #txNumber: 2000
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 200
+        workload:
+          module: workload/HT_Read.js
+          arguments:
+            contractId: ACMC
+      - label: HighThroughputWrite
+        description: Read asset benchmark
+        txDuration: 30
+        #txNumber: 2000
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 200
+        workload:
+          module: workload/HT_Write.js
+          arguments:
+            contractId: ACMC
+      
+      - label: Read
+        description: Read asset benchmark
+        txDuration: 30
+        #txNumber: 2000
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 200 
+        workload:
+          module: workload/Read.js
+          arguments:
+            contractId: ACMC
+      - label: HighThroughputRead
+        description: Read asset benchmark
+        txDuration: 30
+        #txNumber: 2000
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 200
+        workload:
+          module: workload/HT_Read.js
+          arguments:
+            contractId: ACMC
+      - label: HighThroughputWrite
+        description: Read asset benchmark
+        txDuration: 30
+        #txNumber: 2000
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 200
+        workload:
+          module: workload/HT_Write.js
+          arguments:
+            contractId: ACMC
+
+
+      - label: Read
+        description: Read asset benchmark
+        txDuration: 30
+        #txNumber: 2000
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 200 
+        workload:
+          module: workload/Read.js
+          arguments:
+            contractId: ACMC
+      - label: HighThroughputRead
+        description: Read asset benchmark
+        txDuration: 30
+        #txNumber: 2000
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 200
+        workload:
+          module: workload/HT_Read.js
+          arguments:
+            contractId: ACMC
+      - label: HighThroughputWrite
+        description: Read asset benchmark
+        txDuration: 30
+        #txNumber: 2000
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 200
+        workload:
+          module: workload/HT_Write.js
+          arguments:
+            contractId: ACMC
+
+      - label: Read
+        description: Read asset benchmark
+        txDuration: 30
+        #txNumber: 2000
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 200 
+        workload:
+          module: workload/Read.js
+          arguments:
+            contractId: ACMC
+      - label: HighThroughputRead
+        description: Read asset benchmark
+        txDuration: 30
+        #txNumber: 2000
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 200
+        workload:
+          module: workload/HT_Read.js
+          arguments:
+            contractId: ACMC
+      - label: HighThroughputWrite
+        description: Read asset benchmark
+        txDuration: 30
+        #txNumber: 2000
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 200
+        workload:
+          module: workload/HT_Write.js
+          arguments:
+            contractId: ACMC

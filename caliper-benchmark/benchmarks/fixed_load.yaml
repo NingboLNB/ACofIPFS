@@ -1,0 +1,85 @@
+test:
+    name: basic-contract-benchmark
+    description: test benchmark
+    workers:
+      type: local
+      number: 5
+    rounds:
+      - label: Warm-up ACMC
+        description: Read asset benchmark
+        txDuration: 60
+        #txNumber: 5500
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 80 
+        workload:
+          module: workload/queryObject.js
+          arguments:
+            contractId: ACMC
+      - label: Warm-up ALMC
+        description: Read asset benchmark
+        txDuration: 60
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 80
+        workload:
+          module: workload/queryGrantLog.js
+          arguments:
+            contractId: ALMC
+      
+      - label: queryObject
+        description: Read asset benchmark
+        txDuration: 90
+        #txNumber: 5500
+        rateControl: 
+          type: fixed-load
+          opts:
+            transactionLoad: 550
+            #startingTps: 50 
+        workload:
+          module: workload/queryObject.js
+          arguments:
+            contractId: ACMC
+
+      - label: tokenValidation
+        description: Read asset benchmark
+        txDuration: 90
+        rateControl: 
+          type: fixed-load
+          opts:
+            transactionLoad: 550
+            #startingTps: 50 
+        workload:
+          module: workload/tokenValidation.js
+          arguments:
+            contractId: ALMC
+      
+      - label: getToken
+        description: Read asset benchmark
+        txDuration: 90
+        #txNumber: 5500
+        rateControl: 
+          type: fixed-load
+          opts:
+            transactionLoad: 550
+            #startingTps: 50 
+        workload:
+          module: workload/getToken.js
+          arguments:
+            contractId: ACMC
+      
+      - label: AddResource
+        description: Read asset benchmark
+        txDuration: 90
+        #txNumber: 5500
+        rateControl: 
+          type: fixed-load
+          opts:
+            transactionLoad: 550
+            #startingTps: 50 
+        workload:
+          module: workload/addResource.js
+          arguments:
+            contractId: ACMC

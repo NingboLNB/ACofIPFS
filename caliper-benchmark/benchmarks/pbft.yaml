@@ -1,0 +1,32 @@
+test:
+  name: pbft-network
+  description: pbft-network
+  workers:
+    type: local
+    number: 5
+
+  rounds:
+  - label: open
+    description: open
+    txNumber: 2000
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 100
+    workload:
+        module: ./chaincode/demo/callback/queryObject.js
+        arguments:
+            contractId: money_demo
+
+
+monitor:
+  interval: 1
+  type: 
+    - docker
+  docker:
+    containers:
+    - peer0.orga.com
+    - orderer0.yzm.com
+    - orderer1.yzm.com
+    - orderer2.yzm.com
+    - orderer3.yzm.com

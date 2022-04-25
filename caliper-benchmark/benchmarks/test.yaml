@@ -1,0 +1,100 @@
+test:
+    name: basic-contract-benchmark
+    description: test benchmark
+    workers:
+      type: local
+      number: 3
+    rounds:
+      - label: queryObject
+        description: Read asset benchmark
+        txDuration: 12
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 300 
+        workload:
+          module: workload/queryObject.js
+          arguments:
+            contractId: ACMC
+
+      - label: queryPolicy
+        description: Read asset benchmark
+        txDuration: 12
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 300 
+        workload:
+          module: workload/queryPolicy.js
+          arguments:
+            contractId: ACMC
+      - label: queryGrantLog
+        description: Read asset benchmark
+        txDuration: 12
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 300 
+        workload:
+          module: workload/queryGrantLog.js
+          arguments:
+            contractId: ALMC
+      - label: queryAccessLog
+        description: Read asset benchmark
+        txDuration: 12
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 300 
+        workload:
+          module: workload/queryAccessLog.js
+          arguments:
+            contractId: ALMC
+
+      - label: AddResource
+        description: Read asset benchmark
+        txDuration: 12
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 100
+        workload:
+          module: workload/addResource.js
+          arguments:
+            contractId: ACMC
+
+      - label: AddPolicy
+        description: Read asset benchmark
+        txDuration: 12
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 100
+        workload:
+          module: workload/addPolicy.js
+          arguments:
+            contractId: ACMC
+
+      - label: getToken
+        description: Read asset benchmark
+        txDuration: 12
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 100
+        workload:
+          module: workload/getToken.js
+          arguments:
+            contractId: ACMC
+      
+      - label: tokenValidation
+        description: Read asset benchmark
+        txDuration: 12
+        rateControl: 
+          type: fixed-rate
+          opts:
+            tps: 300 
+        workload:
+          module: workload/tokenValidation.js
+          arguments:
+            contractId: ALMC

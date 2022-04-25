@@ -1,0 +1,138 @@
+name: Fabric
+version: "1.0"
+mutual-tls: false
+
+caliper:
+  blockchain: fabric
+
+clients:
+  Admin@org1.example.com:
+    client:
+      organization: Org1
+      credentialStore:
+        path: /tmp/org1
+        cryptoStore:
+          path: /tmp/org1
+      clientPrivateKey:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/priv_sk
+      clientSignedCert:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem
+
+  user4@org1.example.com:
+    client:
+      organization: Org1
+      credentialStore:
+        path: /tmp/org1
+        cryptoStore:
+          path: /tmp/org1
+      clientPrivateKey:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/user4@org1.example.com/msp/keystore/priv_sk
+      clientSignedCert:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/user4@org1.example.com/msp/signcerts/user4@org1.example.com-cert.pem
+  Admin@org2.example.com:
+    client:
+      organization: Org2
+      credentialStore:
+        path: /tmp/org2
+        cryptoStore:
+          path: /tmp/org2
+      clientPrivateKey:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/priv_sk
+      clientSignedCert:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/signcerts/Admin@org2.example.com-cert.pem
+
+channels:
+  mychannel:
+    created: true
+    orderers:
+    - orderer.example.com
+    peers:
+      peer0.org1.example.com:
+        eventSource: true
+      peer1.org1.example.com:
+        eventSource: true
+      peer0.org2.example.com:
+        eventSource: true
+      peer1.org2.example.com:
+        eventSource: true
+
+    contracts:
+    - id: ACMC
+      version: "1.0"
+    - id: ALMC
+      version: "1.0"
+organizations:
+  Org1:
+    mspid: Org1MSP
+    peers:
+    - peer0.org1.example.com
+    - peer1.org1.example.com
+    adminPrivateKey:
+      path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/priv_sk
+    signedCert:
+      path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem
+
+  Org2:
+    mspid: Org2MSP
+    peers:
+    - peer0.org2.example.com
+    - peer1.org2.example.com
+    adminPrivateKey:
+      path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/priv_sk
+    signedCert:
+      path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/signcerts/Admin@org2.example.com-cert.pem
+
+orderers:
+  orderer.example.com:
+    url: grpcs://127.0.0.1:7050
+    grpcOptions:
+      ssl-target-name-override: orderer.example.com
+    tlsCACerts:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/ordererOrganizations/example.com/msp/tlscacerts/tlsca.example.com-cert.pem 
+
+peers:
+  peer0.org1.example.com:
+    url: grpcs://127.0.0.1:7051
+    grpcOptions:
+      ssl-target-name-override: peer0.org1.example.com
+      grpc.keepalive_time_ms: 600000
+    tlsCACerts:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/tlscacerts/tlsca.org1.example.com-cert.pem 
+
+  peer1.org1.example.com:
+    url: grpcs://127.0.0.1:8051
+    grpcOptions:
+      ssl-target-name-override: peer1.org1.example.com
+      grpc.keepalive_time_ms: 600000
+    tlsCACerts:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp/tlscacerts/tlsca.org1.example.com-cert.pem 
+
+  peer0.org2.example.com:
+    url: grpcs://127.0.0.1:9051
+    grpcOptions:
+      ssl-target-name-override: peer0.org2.example.com
+      grpc.keepalive_time_ms: 600000
+    tlsCACerts:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp/tlscacerts/tlsca.org2.example.com-cert.pem 
+
+  peer1.org2.example.com:
+    url: grpcs://127.0.0.1:10051
+    grpcOptions:
+      ssl-target-name-override: peer1.org2.example.com
+      grpc.keepalive_time_ms: 600000
+    tlsCACerts:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp/tlscacerts/tlsca.org2.example.com-cert.pem 
+certificateAuthorities:
+  ca.agridepart.amops.com:
+    url: https://127.0.0.1:7054
+    httpOptions:
+      verify: true
+    tlsCACerts:
+        path: ../amops/multiple-deployment/crypto-config/peerOrganizations/agridepart.amops.com/ca/ca.agridepart.amops.com-cert.pem
+    registrar:
+    - enrollId: admin
+      enrollSecret: adminpw
+
+
+
+

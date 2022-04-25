@@ -1,0 +1,455 @@
+/*
+Copyright IBM Corp. 2016 All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+		 http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package main
+
+//WARNING - this chaincode's ID is hard-coded in chaincode_example04 to illustrate one way of
+//calling chaincode from a chaincode. If this example is modified, chaincode_example04.go has
+//to be modified as well with the new ID of chaincode_example02.
+//chaincode_example05 show's how chaincode ID can be passed in as a parameter instead of
+//hard-coding.
+
+import (
+	"fmt"
+    "encoding/json"
+    "strings"
+    "crypto/sha1"
+    //"crypto/x509"
+    //"encoding/pem"
+    //"log"
+    //"os"
+    "time"
+    //"os/exec"
+    //"bytes"
+    "strconv"
+    //"math/rand"
+    "github.com/hyperledger/fabric/core/chaincode/shim/ext/cid"
+
+	"github.com/hyperledger/fabric/core/chaincode/shim"
+	pb "github.com/hyperledger/fabric/protos/peer"
+)
+
+// SimpleChaincode example simple Chaincode implementation
+type SimpleChaincode struct {
+}
+
+func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
+	fmt.Println("ex02 Init")
+	var err error
+    keyserveraddr:="peer0.org1.example.com,peer1.org1.example.com,peer0.org2.example.com"
+    ResourceDatabase := map[string]map[string]string{}
+    Resourcex := map[string]string{"ResourceID":"resource1","ResourceInformation_ct":"hisuidishsbffshfs","PolicyID":"p135","KeyServerAddr":keyserveraddr,"Owner":"user1","Dept":"FD"}
+    ResourceDatabase["resource1"]=Resourcex
+    B := "resource_database"
+    str, err := json.Marshal(ResourceDatabase)
+    if err != nil {
+        fmt.Println(err)
+    }
+	err = stub.PutState(B, []byte(str))
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+    PolicyDatabase := map[string ]map[string] map[string] map[string] string{}
+    SA := map[string]string{"Role":"*","Level":"5"}
+    OA := map[string]string{"ResourceID":"resource1"}
+    AA := map[string]string{"OP":"Download"}
+    JudgmentType := map[string]string{"RCA":"PermitOverrides"}
+    Target := map[string] map[string] string{}
+    Target["SA"]=SA
+    Target["OA"]=OA
+    Target["AA"]=AA
+    Target["JudgmentType"]=JudgmentType
+    Action1 := map[string]string{"Efect":"Permit","OP":"AND"}
+    Functions1 := map[string]string{"FuncNum":"2","Function1":"isSameDepartment","Args1":"SA,OA","Function2":"more_than","Args2":"SA.Level,2"}
+    Rule1 := map[string]map[string]string{}
+    Rule1["Action"]=Action1
+    Rule1["Functions"]=Functions1
+    Action2 := map[string]string{"Efect":"Permit","OP":"OR"}
+    Functions2 := map[string]string{"FuncNum":"2","Function1":"isOwner","Args1":"SA,OA.Owner","Function2":"isManager","Args2":"SA.Role"}
+    Rule2 := map[string]map[string]string{}
+    Rule2["Action"]=Action2
+    Rule2["Functions"]=Functions2
+    Action3 := map[string]string{"Efect":"Deny","OP":"OR"}
+    Functions3 := map[string]string{"FuncNum":"1","Function1":"string_equal","Args1":"SA.Role,guest"}
+    Rule3 := map[string]map[string]string{}
+    Rule3["Action"]=Action3
+    Rule3["Functions"]=Functions3
+
+    Resource1 := map[string]map[string]map[string]string{}
+    Resource1["Target"]=Target
+    Resource1["Rule1"]=Rule1
+    Resource1["Rule2"]=Rule2
+    Resource1["Rule3"]=Rule3
+    PolicyDatabase["resource1"]=Resource1
+    A:= "policy_database"
+    str_policy, err := json.Marshal(PolicyDatabase)
+    if err != nil {
+        fmt.Println(err)
+    }
+	err = stub.PutState(A, []byte(str_policy))
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+    record_map := map[string]string{"Requester":"","ResourceID":"","GrantTime":"","Action":"","DecisionResult":"Permit","EffevtiveDuration":"2h"}
+    record_str,err := json.Marshal(record_map)
+    if err != nil {
+        fmt.Println(err)
+    }
+    sha1Inst := sha1.New()
+    sha1Inst.Write(record_str)
+    record_hash := sha1Inst.Sum([]byte(""))
+    record_index := string(fmt.Sprintf("%x",record_hash))
+	err = stub.PutState(record_index, []byte(record_str))
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+    return shim.Success(nil)
+}
+
+func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
+	fmt.Println("ex02 Invoke")
+	function, args := stub.GetFunctionAndParameters()
+	if function == "grantAccess" {
+		return t.grantAccess(stub, args)
+	}
+
+	return shim.Error("Invalid invoke function name. Expecting \"grantAccess\"")
+}
+func  getEnvirment(stub shim.ChaincodeStubInterface) pb.Response{
+    timestamp, _ := stub.GetTxTimestamp()
+	tm:= time.Unix(timestamp.Seconds, 0)
+	ts := tm.Format("2006-01-02 03:04:05 PM")
+    return shim.Success([]byte(ts))
+}
+
+func  getObject(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+    var resourceID string
+    var resource_attr map[string]string
+    database := "resource_database"
+    resourceID = args[0]
+	resource_str, err := stub.GetState(database)
+	if err != nil {
+		return shim.Error("Failed to get state")
+	}
+	if resource_str == nil {
+		jsonResp := "{\"Error\":\"Nil amount for " + database + "\"}"
+		return shim.Error(jsonResp)
+	}
+    resource_map := map[string]map[string]string{}
+    //map2 := make(map[string]interface{})
+    err = json.Unmarshal(resource_str, &resource_map)
+    if err != nil {
+        fmt.Println(err)
+    }
+    resource_attr=resource_map[resourceID]
+    str1,err := json.Marshal(resource_attr)
+    if err != nil {
+        fmt.Println(err)
+    }
+	return shim.Success(str1)
+	//return shim.Success(resource_str)
+
+}
+
+func  getSubject(stub shim.ChaincodeStubInterface) pb.Response {
+    var subject_attr map[string]string
+    subject_attr = make(map[string]string)
+    val, ok, err := cid.GetAttributeValue(stub, "Role")
+    if err != nil {
+		return shim.Error("getAttributeValue false!")
+    }
+    if !ok {
+		return shim.Error("Client identity does not possess attribute!")
+    }
+    //subject_attr["Role"]=string(val)
+    val1, ok, err := cid.GetAttributeValue(stub, "Department")
+    if err != nil {
+		return shim.Error("getAttributeValue false!")
+    }
+    if !ok {
+		return shim.Error("Client identity does not possess attribute!")
+    }
+    //subject_attr["Department"]=string(val1)
+    val2, ok, err := cid.GetAttributeValue(stub, "Level")
+    if err != nil {
+		return shim.Error("getAttributeValue false!")
+    }
+    if !ok {
+		return shim.Error("Client identity does not possess attribute!")
+    }
+    val3, ok, err := cid.GetAttributeValue(stub, "Name")
+    if err != nil {
+		return shim.Error("getAttributeValue false!")
+    }
+    if !ok {
+		return shim.Error("Client identity does not possess attribute!")
+    }
+    subject_attr["Role"]=val
+    subject_attr["Department"]=val1
+    subject_attr["Level"]=val2
+    subject_attr["Name"]=val3
+    str,err := json.Marshal(subject_attr)
+    if err != nil {
+        fmt.Println("json.Marshal false!")
+    }
+    //str := strings.Join([]string{val,val1,val2},",")
+	return shim.Success(str)
+
+}
+func isSameDepartment(sa_map map[string]string,oa_map map[string]string) bool{
+    if strings.Compare(sa_map["Department"],oa_map["Dept"])==0{
+        return true
+    }
+    return false
+}
+
+func more_than(subject_level string, level int) bool {
+    i, err := strconv.Atoi(subject_level)
+    if err != nil {
+        panic(err)
+    }
+    if i > level{
+        return true
+    }
+    return false
+}
+
+func isManager(role string) bool{
+    if strings.Compare(role,"manager")==0{
+        return true
+    }
+    return false
+}
+func isOwner(user string,owner string) bool{
+    if strings.Compare(user,owner)==0 {
+        return true 
+    }
+    return false
+}
+func isMeetedTarget() bool{
+    return true
+}
+func ANDfunction(val1 bool,val2 bool) bool{
+    if val1==true && val2 == true{
+        return true
+    }
+    return false
+}
+
+func ORfunction(val1 bool,val2 bool) bool{
+    if val1==false && val2 == false{
+        return false
+    }
+    return true
+}
+func permitOverrides(rule1 string ,rule2 string ,rule3 string) string{
+    permit:="Permit"
+    deny:="Deny"
+    
+    if rule1==permit || rule2==permit || rule3==permit{
+        return permit
+    }
+    return deny
+}
+func denyOverrides(rule1 string ,rule2 string ,rule3 string) string{
+    permit:="Permit"
+    deny:="Deny"
+    if rule1==deny || rule2==deny || rule3==deny{
+        return deny
+    }
+    return permit
+}
+
+func string_equal(str1 string,str2 string) bool{
+    if strings.Compare(str1,str2)==0{
+        return true
+    }
+    return false
+}
+
+func  getPolicy(stub shim.ChaincodeStubInterface,args []string) pb.Response{
+    A := "policy_database"
+	var err error
+    var resourceID string
+    resourceID = args[0]
+    database := map[string]map[string]map[string]map[string]string{}
+    str,_ := stub.GetState(A)
+    //map2 := make(map[string]interface{})
+    err = json.Unmarshal(str, &database)
+    if err != nil {
+        fmt.Println(err)
+    }
+    var resource map[string]map[string]map[string]string
+    resource = make(map[string]map[string]map[string]string)
+    resource=database[resourceID]
+    str1,err := json.Marshal(resource)
+    if err != nil {
+        fmt.Println(err)
+    }
+    return shim.Success(str1)
+}
+
+func  getDecision(stub shim.ChaincodeStubInterface,args []string) pb.Response{
+	var err error
+    var attrs string
+    var attrs_map map[string] map[string] string
+    attrs_map = make(map[string] map[string] string)
+    var sa_map map [string] string
+    sa_map = make(map[string] string)
+    var oa_map map [string] string
+    oa_map = make(map[string] string)
+    var ea_map map [string] string
+    ea_map = make(map[string] string)
+    var aa_map map [string] string
+    aa_map = make(map[string] string)
+    attrs = args[0]
+    err = json.Unmarshal([]byte(attrs), &attrs_map)
+    if err != nil {
+        fmt.Println(err)
+    }
+    sa_map=attrs_map["SA"]
+    oa_map=attrs_map["OA"]
+    ea_map=attrs_map["EA"]
+    fmt.Println(ea_map)
+    aa_map=attrs_map["AA"]
+    fmt.Println(aa_map)
+    resourceID := oa_map["ResourceID"]
+    var policy_args = []string{resourceID}
+    policy_bytes := getPolicy(stub,policy_args)
+    var policy map[string] map[string] map[string] string
+    policy = make(map[string] map[string] map[string] string)
+    err = json.Unmarshal([]byte(policy_bytes.Payload), &policy)
+    if err != nil {
+        fmt.Println(err)
+    }
+    if isMeetedTarget() == false{
+        return shim.Error("Condition not applicable!!!")
+    }
+    var rule1_val string
+    var rule2_val string
+    var rule3_val string
+    if ANDfunction(isSameDepartment(sa_map,oa_map),more_than(sa_map["Level"],0)) == true{
+        rule1_val = "Permit"
+    }else{
+        rule1_val = "Dissatisfy"
+    }
+
+    if ORfunction(isOwner(sa_map["Name"],oa_map["Owner"]),isManager(sa_map["Role"])) == true{
+        rule2_val = "Permit"
+    }else{
+        rule2_val = "Dissatisfy"
+    }
+    if string_equal(sa_map["Role"],"guest") == true{
+        rule3_val = "Deny"
+    }else{
+        rule3_val = "Dissatisfy"
+    }
+    result := permitOverrides(rule1_val,rule2_val,rule3_val)
+    /*policy_str,err := json.Marshal(policy)
+    if err != nil {
+        fmt.Println(err)
+    }
+    return shim.Success(policy_str)*/
+    return shim.Success([]byte(result))
+}
+func putGrantRecord(stub shim.ChaincodeStubInterface,args []string) pb.Response{
+    var err error
+    var record_str string
+    var record_map map[string] string
+    record_str = args[0]
+    err = json.Unmarshal([]byte(record_str), &record_map)
+    if err != nil {
+        fmt.Println(err)
+    }
+    sha1Inst := sha1.New()
+    sha1Inst.Write([]byte(record_str))
+    record_hash := sha1Inst.Sum([]byte(""))
+    record_index := string(fmt.Sprintf("%x",record_hash))
+	err = stub.PutState(record_index, []byte(record_str))
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	//return shim.Success([]byte(record_index))
+	return shim.Success(nil)
+}
+
+func (t *SimpleChaincode) grantAccess(stub shim.ChaincodeStubInterface,args []string) pb.Response{
+	var err error
+    var resourceID,action string
+    var all_attr map[string]map[string]string
+    all_attr = make(map[string] map[string] string)
+    resourceID = args[0]
+    fmt.Println(resourceID)
+    action = args[1]
+    subject_bytes := getSubject(stub) //通过调用pip链码获取属性
+    object_bytes := getObject(stub,args)
+    env_bytes := getEnvirment(stub)
+    var action_attr map[string] string
+    action_attr = make(map[string] string)
+    action_attr["OP"]=action
+    var env_attr map[string] string
+    env_attr = make(map[string] string)
+    env_attr["Time"]=string(env_bytes.Payload)
+    var object_attr map[string] string
+    object_attr = make(map[string] string)
+    err = json.Unmarshal(object_bytes.Payload, &object_attr)
+    if err != nil {
+        fmt.Println(err)
+    }
+    var subject_attr map[string] string
+    subject_attr = make(map[string] string)
+    err = json.Unmarshal(subject_bytes.Payload, &subject_attr)
+    if err != nil {
+        fmt.Println(err)
+    }
+    all_attr["SA"]=subject_attr
+    all_attr["OA"]=object_attr
+    all_attr["AA"]=action_attr
+    all_attr["EA"]=env_attr  //all attributevalue 组建完成
+    attrs,err := json.Marshal(all_attr)
+    if err != nil {
+        fmt.Println(err)
+    }
+// invoke pdp 
+    var getDecision_args = []string{string(attrs)}
+    pdp_bytes := getDecision(stub,getDecision_args)
+    str_pdp := string(pdp_bytes.Payload)
+    record_map := map[string]string{"Requester":subject_attr["Name"],"ResourceID":object_attr["ResourceID"],"GrantTime":env_attr["Time"],"Action":action,"DecisionResult":str_pdp}
+    if str_pdp == "Permit"{
+        record_map["EffevtiveDuration"]="2"
+        record_map["Server"]=object_attr["KeyServerAddr"]
+    }else{
+        record_map["EffevtiveDuration"]="0"
+        record_map["Server"]="Null"
+    }
+    str_record,err := json.Marshal(record_map)
+    if err != nil {
+        fmt.Println(err)
+    }
+    var putGrantRecord_args = []string{string(str_record)}
+
+    putGrantRecord(stub,putGrantRecord_args)
+    //return shim.Success(test.Payload)
+    return shim.Success(str_record)
+}
+
+func main() {
+	err := shim.Start(new(SimpleChaincode))
+	if err != nil {
+		fmt.Printf("Error starting Simple chaincode: %s", err)
+	}
+}
+

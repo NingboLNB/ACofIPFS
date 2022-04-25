@@ -1,0 +1,125 @@
+name: Fabric
+version: "1.0"
+mutual-tls: false
+
+caliper:
+  blockchain: fabric
+
+clients:
+  user4@org1.example.com:
+    client:
+      organization: Org1
+      credentialStore:
+        path: /tmp/org1
+        cryptoStore:
+          path: /tmp/org1
+      clientPrivateKey:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/user4@org1.example.com/msp/keystore/priv_sk
+      clientSignedCert:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/user4@org1.example.com/msp/signcerts/user4@org1.example.com-cert.pem
+  Admin@org2.example.com:
+    client:
+      organization: Org2
+      credentialStore:
+        path: /tmp/org2
+        cryptoStore:
+          path: /tmp/org2
+      clientPrivateKey:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/priv_sk
+      clientSignedCert:
+        path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/signcerts/Admin@org2.example.com-cert.pem
+
+channels:
+  mychannel:
+    created: true
+    orderers:
+    - orderer2.example.com
+    - orderer3.example.com
+    - orderer4.example.com
+    - orderer5.example.com
+    peers:
+      peer0.org1.example.com:
+        eventSource: true
+      peer1.org1.example.com:
+        eventSource: true
+      peer0.org2.example.com:
+        eventSource: true
+      peer1.org2.example.com:
+        eventSource: true
+
+    contracts:
+    - id: ACMC
+      version: "1.0"
+    - id: ALMC
+      version: "1.0"
+organizations:
+  Org1:
+    mspid: Org1MSP
+    peers:
+    - peer0.org1.example.com
+    - peer1.org1.example.com
+    adminPrivateKey:
+      path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/priv_sk
+    signedCert:
+      path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem
+
+  Org2:
+    mspid: Org2MSP
+    peers:
+    - peer0.org2.example.com
+    - peer1.org2.example.com
+    adminPrivateKey:
+      path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/keystore/priv_sk
+    signedCert:
+      path: ../../hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp/signcerts/Admin@org2.example.com-cert.pem
+
+orderers:
+  orderer2.example.com:
+    url: grpc://172.22.0.100:6050
+    grpcOptions:
+        #grcp.keepalive_time_ms: 600000
+        ssl-target-name-override: orderer2.example.com
+  orderer3.example.com:
+    url: grpc://172.22.0.101:6050
+    grpcOptions:
+        #grcp.keepalive_time_ms: 600000
+        ssl-target-name-override: orderer3.example.com
+  orderer4.example.com:
+    url: grpc://172.22.0.102:6050
+    grpcOptions:
+        #grcp.keepalive_time_ms: 600000
+        ssl-target-name-override: orderer4.example.com
+  orderer5.example.com:
+    url: grpc://172.22.0.103:6050
+    grpcOptions:
+        #grcp.keepalive_time_ms: 600000
+        ssl-target-name-override: orderer5.example.com
+
+peers:
+  peer0.org1.example.com:
+    url: grpc://172.22.0.2:7051
+    grpcOptions:
+        #grcp.keepalive_time_ms: 600000
+        ssl-target-name-override: peer0.org1.example.com
+
+  peer1.org1.example.com:
+    url: grpc://172.22.0.3:8051
+    grpcOptions:
+        #grcp.keepalive_time_ms: 600000
+        ssl-target-name-override: peer1.org1.example.com
+
+  peer0.org2.example.com:
+    url: grpc://172.22.0.4:9051
+    grpcOptions:
+        #grcp.keepalive_time_ms: 600000
+        ssl-target-name-override: peer0.org2.example.com
+
+  peer1.org2.example.com:
+    url: grpc://172.22.0.5:10051
+    grpcOptions:
+        #grcp.keepalive_time_ms: 600000
+        ssl-target-name-override: peer1.org2.example.com
+
+
+
+
