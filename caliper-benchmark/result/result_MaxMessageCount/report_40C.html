@@ -128,7 +128,7 @@
                 <li>DLT: &nbsp<span style="font-weight: 500;">fabric</span></li>
                 <li>Name: &nbsp<span style="font-weight: 500;">basic-contract-benchmark</span></li>
                 <li>Description: &nbsp<span style="font-weight: 500;">test benchmark</span></li>
-                <li>Benchmark Rounds: &nbsp<span style="font-weight: 500;">6</span></li>
+                <li>Benchmark Rounds: &nbsp<span style="font-weight: 500;">3</span></li>
                 <li><a href="#benchmarkInfo">Details</a></li>
             </ul>
             <ul>
@@ -136,10 +136,7 @@
                 <li><a href="#benchmarksummary">Summary</a></li>
                     <li><a href="#Warm-up ACMC">Warm-up ACMC</a></li>
                     <li><a href="#Warm-up ALMC">Warm-up ALMC</a></li>
-                    <li><a href="#queryObject">queryObject</a></li>
-                    <li><a href="#tokenValidation">tokenValidation</a></li>
                     <li><a href="#getToken">getToken</a></li>
-                    <li><a href="#AddResource">AddResource</a></li>
             </ul>
             <ul>
                 <h3>&nbspSystem under test</h3>
@@ -157,22 +154,13 @@
                     </tr>
 
                     <tr>
-                         <td>Warm-up ACMC</td> <td>4804</td> <td>0</td> <td>89.0</td> <td>80.32</td> <td>0.93</td> <td>49.93</td> <td>59.9</td>
+                         <td>Warm-up ACMC</td> <td>4805</td> <td>0</td> <td>-1789.6</td> <td>85.12</td> <td>5.17</td> <td>48.26</td> <td>216.0</td>
                     </tr>
                     <tr>
-                         <td>Warm-up ALMC</td> <td>4805</td> <td>0</td> <td>87.4</td> <td>78.74</td> <td>0.60</td> <td>48.67</td> <td>60.4</td>
+                         <td>Warm-up ALMC</td> <td>4804</td> <td>0</td> <td>82.2</td> <td>83.61</td> <td>0.35</td> <td>48.02</td> <td>57.2</td>
                     </tr>
                     <tr>
-                         <td>queryObject</td> <td>7374</td> <td>0</td> <td>87.7</td> <td>5.21</td> <td>0.73</td> <td>1.76</td> <td>86.4</td>
-                    </tr>
-                    <tr>
-                         <td>tokenValidation</td> <td>6703</td> <td>0</td> <td>80.0</td> <td>5.24</td> <td>0.65</td> <td>1.98</td> <td>78.5</td>
-                    </tr>
-                    <tr>
-                         <td>getToken</td> <td>6176</td> <td>0</td> <td>73.5</td> <td>5.21</td> <td>0.88</td> <td>2.46</td> <td>72.2</td>
-                    </tr>
-                    <tr>
-                         <td>AddResource</td> <td>6979</td> <td>0</td> <td>83.1</td> <td>5.19</td> <td>0.51</td> <td>1.75</td> <td>81.6</td>
+                         <td>getToken</td> <td>6243</td> <td>0</td> <td>74.4</td> <td>5.70</td> <td>0.39</td> <td>1.26</td> <td>72.1</td>
                     </tr>
                 </table>
             </div>
@@ -191,7 +179,7 @@ rateControl:
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>Warm-up ACMC</td> <td>4804</td> <td>0</td> <td>89.0</td> <td>80.32</td> <td>0.93</td> <td>49.93</td> <td>59.9</td>
+                                     <td>Warm-up ACMC</td> <td>4805</td> <td>0</td> <td>-1789.6</td> <td>85.12</td> <td>5.17</td> <td>48.26</td> <td>216.0</td>
                                 </tr>
                             </table>
                         <h3>Resource utilization for Warm-up ACMC</h3>
@@ -212,52 +200,10 @@ rateControl:
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>Warm-up ALMC</td> <td>4805</td> <td>0</td> <td>87.4</td> <td>78.74</td> <td>0.60</td> <td>48.67</td> <td>60.4</td>
+                                     <td>Warm-up ALMC</td> <td>4804</td> <td>0</td> <td>82.2</td> <td>83.61</td> <td>0.35</td> <td>48.02</td> <td>57.2</td>
                                 </tr>
                             </table>
                         <h3>Resource utilization for Warm-up ALMC</h3>
-            </div>
-
-            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="queryObject">
-                <h2>Benchmark round: queryObject</h2>
-                <p>Read asset benchmark</p>
-                <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">txDuration: 90
-rateControl:
-  type: fixed-load
-  opts:
-    transactionLoad: 400
-</pre>
-                        <h3>Performance metrics for queryObject</h3>
-                            <table style="min-width: 100%;">
-                                <tr>
-                                     <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
-                                </tr>
-                                <tr>
-                                     <td>queryObject</td> <td>7374</td> <td>0</td> <td>87.7</td> <td>5.21</td> <td>0.73</td> <td>1.76</td> <td>86.4</td>
-                                </tr>
-                            </table>
-                        <h3>Resource utilization for queryObject</h3>
-            </div>
-
-            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="tokenValidation">
-                <h2>Benchmark round: tokenValidation</h2>
-                <p>Read asset benchmark</p>
-                <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">txDuration: 90
-rateControl:
-  type: fixed-load
-  opts:
-    transactionLoad: 400
-</pre>
-                        <h3>Performance metrics for tokenValidation</h3>
-                            <table style="min-width: 100%;">
-                                <tr>
-                                     <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
-                                </tr>
-                                <tr>
-                                     <td>tokenValidation</td> <td>6703</td> <td>0</td> <td>80.0</td> <td>5.24</td> <td>0.65</td> <td>1.98</td> <td>78.5</td>
-                                </tr>
-                            </table>
-                        <h3>Resource utilization for tokenValidation</h3>
             </div>
 
             <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="getToken">
@@ -267,7 +213,7 @@ rateControl:
 rateControl:
   type: fixed-load
   opts:
-    transactionLoad: 400
+    transactionLoad: 550
 </pre>
                         <h3>Performance metrics for getToken</h3>
                             <table style="min-width: 100%;">
@@ -275,31 +221,10 @@ rateControl:
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>getToken</td> <td>6176</td> <td>0</td> <td>73.5</td> <td>5.21</td> <td>0.88</td> <td>2.46</td> <td>72.2</td>
+                                     <td>getToken</td> <td>6243</td> <td>0</td> <td>74.4</td> <td>5.70</td> <td>0.39</td> <td>1.26</td> <td>72.1</td>
                                 </tr>
                             </table>
                         <h3>Resource utilization for getToken</h3>
-            </div>
-
-            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="AddResource">
-                <h2>Benchmark round: AddResource</h2>
-                <p>Read asset benchmark</p>
-                <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">txDuration: 90
-rateControl:
-  type: fixed-load
-  opts:
-    transactionLoad: 400
-</pre>
-                        <h3>Performance metrics for AddResource</h3>
-                            <table style="min-width: 100%;">
-                                <tr>
-                                     <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
-                                </tr>
-                                <tr>
-                                     <td>AddResource</td> <td>6979</td> <td>0</td> <td>83.1</td> <td>5.19</td> <td>0.51</td> <td>1.75</td> <td>81.6</td>
-                                </tr>
-                            </table>
-                        <h3>Resource utilization for AddResource</h3>
             </div>
 
             <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;">
@@ -333,48 +258,15 @@ rounds:
       module: workload&#x2F;queryGrantLog.js
       arguments:
         contractId: ALMC
-  - label: queryObject
-    description: Read asset benchmark
-    txDuration: 90
-    rateControl:
-      type: fixed-load
-      opts:
-        transactionLoad: 400
-    workload:
-      module: workload&#x2F;queryObject.js
-      arguments:
-        contractId: ACMC
-  - label: tokenValidation
-    description: Read asset benchmark
-    txDuration: 90
-    rateControl:
-      type: fixed-load
-      opts:
-        transactionLoad: 400
-    workload:
-      module: workload&#x2F;tokenValidation.js
-      arguments:
-        contractId: ALMC
   - label: getToken
     description: Read asset benchmark
     txDuration: 90
     rateControl:
       type: fixed-load
       opts:
-        transactionLoad: 400
+        transactionLoad: 550
     workload:
       module: workload&#x2F;getToken.js
-      arguments:
-        contractId: ACMC
-  - label: AddResource
-    description: Read asset benchmark
-    txDuration: 90
-    rateControl:
-      type: fixed-load
-      opts:
-        transactionLoad: 400
-    workload:
-      module: workload&#x2F;addResource.js
       arguments:
         contractId: ACMC
 </pre>
